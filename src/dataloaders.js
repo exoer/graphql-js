@@ -1,7 +1,11 @@
 const DataLoader = require('dataloader');
 
 async function batchUsers (Users, keys) {
-  return await Users.find({_id: {$in: keys}}).toArray();
+  const unorderedUsers = await Users.find({_id: {$in: keys}}).toArray()
+  let obj = {}
+  unorderedUsers.forEach(x => obj[x._id]=x)
+  const ordered = keys.map(key => obj[key])
+  return ordered
 }
 
 module.exports = ({Users}) =>({
